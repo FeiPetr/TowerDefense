@@ -14,7 +14,6 @@ class Rocket extends Phaser.GameObjects.Sprite {
 
     update()
     {
-      if(!this.isFiring){
         if(keyLEFT.isDown || (game.input.activePointer.x < 320 ) && this.x >= borderUISize + this.width)
         {
           this.x -= this.moveSpeed;
@@ -31,20 +30,27 @@ class Rocket extends Phaser.GameObjects.Sprite {
           }
 
         }
-      }
-      //fire button (F or click)
-      if(Phaser.Input.Keyboard.JustDown(keyF) || game.input.activePointer.isDown && !this.isFiring){
-        this.isFiring = true;
-        this.sfxRocket.play();  // play sfx
+        else if (keyUP.isDown  || (game.input.activePointer.x > 320 ) && this.y <= game.config.width - borderUISize - this.width)
+        {
+          this.y += this.moveSpeed;
+          if(this.y != game.input.activePointer.y)
+          {
+            this.y = game.input.activePointer.y;
+          }
 
-      }
-      //if fired, move up
-      if(this.isFiring && this.y >= borderUISize * 3 + borderPadding)
-      {
-        this.y -= this.moveSpeed;
-      }
-      //reset on miss
-      if(this.y <= borderUISize * 3 +borderPadding){
+        }else if (keyDOWN.isDown  || (game.input.activePointer.x > 320 ) && this.y <= game.config.width - borderUISize - this.width)
+        {
+          this.y += this.moveSpeed;
+          if(this.y != game.input.activePointer.y)
+          {
+            this.y = game.input.activePointer.y;
+          }
+
+        }
+
+      
+      //potentially keep something like this for sprite to wrap around screen if i don't keep hard boundaries
+      if(this.y <= borderUISize * 3 +borderPadding || this.x <= borderUISize * 3 +borderPadding){
         this.reset();
       }
       //this.p1Rocket.update();
@@ -52,8 +58,8 @@ class Rocket extends Phaser.GameObjects.Sprite {
     }
     reset()
     {
-      this.isFiring = false;
       this.y = game.config.height - borderUISize -borderPadding;
+      this.x = game.config.height - borderUISize -borderPadding; // fix this if needed; just a placeholder
     }
   }
   

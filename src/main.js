@@ -18,9 +18,12 @@ Rocket Patrol 100000 Remodeled Super Epic Hakxor Version
 
 
 let config = {
-    type: Phaser.CANVAS,
-    width: 640,
-    height:480,
+    type: Phaser.AUTO,
+    width: 600,
+    height:600,
+    scale: {
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
     scene: [Menu,Play],
     highScore: 0
 
