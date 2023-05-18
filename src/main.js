@@ -41,6 +41,7 @@ let game = new Phaser.Game(config);
 let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 game.config.highScore = 0;
+let keyF, keyR, keyLEFT, keyRIGHT;
 
 //Track a high score that persists across scenes and display it in the UI (5)
 //global variable

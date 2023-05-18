@@ -6,7 +6,7 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
 
     preload() {
         // load images/tile sprites
-        this.load.image('starfield', './assets/Test Map.png');
+        this.load.image('map', './assets/Test Map.png');
         // load spritesheet
         this.load.spritesheet('character', './assets/cat_sprites.PNG', {frameWidth: 107, frameHeight: 80, startFrame: 0, endFrame: 1});
       }
@@ -14,9 +14,9 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
     create(){
         //this.add.text(20,20,"TesttestTETSTTSTT");
         // place tile sprite (placeholder)
-        this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
+        this.starfield = this.add.tileSprite(0, 0, 1280, 1281, 'map').setOrigin(0, 0);
         // add character
-        this.character = this.physics.add.sprite(this.sys.game.config.width / 2, this.sys.game.config.height/2, 'character');
+        this.character = this.physics.add.sprite(this.sys.game.config.width / 2, this.sys.game.config.height/2, 'character',0);
         //animate character
         this.anims.create({
           key: 'cat',
@@ -25,6 +25,7 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
           repeat: -1
         });
         this.character.anims.play('cat');
+        this.character.body.setCollideWorldBounds(true);
 
 
         // define keys
