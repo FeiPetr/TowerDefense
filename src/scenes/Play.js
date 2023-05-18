@@ -6,17 +6,25 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
 
     preload() {
         // load images/tile sprites
-        this.load.image('rocket', './assets/rocket.png');
-        this.load.image('starfield', './assets/starfield.png');
+        this.load.image('starfield', './assets/Test Map.png');
         // load spritesheet
-        this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+        this.load.spritesheet('character', './assets/cat_sprites.PNG', {frameWidth: 107, frameHeight: 80, startFrame: 0, endFrame: 1});
       }
       
     create(){
         //this.add.text(20,20,"TesttestTETSTTSTT");
         // place tile sprite (placeholder)
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
-        this.character = this.physics.add.sprite(32, 32,'rocket',0);
+        // add character
+        this.character = this.physics.add.sprite(this.sys.game.config.width / 2, this.sys.game.config.height/2, 'character');
+        //animate character
+        this.anims.create({
+          key: 'cat',
+          frames: this.anims.generateFrameNumbers('character', { start: 0, end: 1, first: 0}),
+          frameRate: 3,
+          repeat: -1
+        });
+        this.character.anims.play('cat');
 
 
         // define keys
@@ -41,20 +49,8 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
 
         // GAME OVER flag
         this.gameOver = false;
-
-
-        // 60-second play clock
-        scoreConfig.fixedWidth = 0;
-        this.clock = this.time.delayedCall(60000, () => {
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
-            //display high score
-            this.add.text(game.config.width/2, game.config.height/2 + 128, 'High Score: ' + game.config.highScore, scoreConfig).setOrigin(0.5);
-            this.gameOver = true;
-        }, null, this);
-        this.elapsed = parseInt(this.clock.getRemainingSeconds()); // get elapsed time
-        this.timeLeft = this.add.text(borderUISize + borderPadding + 256, borderUISize + borderPadding*2, this.elapsed, scoreConfig);
- 
+        
+        // Maybe add clock after
         
 
 
@@ -82,11 +78,9 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
             this.direction.y = 1
         }
         this.direction.normalize()
-        this.slime.setVelocity(this.VEL*this.direction.x,this.VEL*this.direction.y)
+        this.character.setVelocity(this.VEL*this.direction.x,this.VEL*this.direction.y)
 
       }
-
-
 
 
 
@@ -100,56 +94,10 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
           return false;
         }
       }
-      shipExplode(ship) {
-        // temporarily hide ship
-        ship.alpha = 0;
-        // create explosion sprite at ship's position
-        let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
-        boom.anims.play('explode');             // play explode animation
-        boom.on('animationcomplete', () => {    // callback after anim completes
-          ship.reset();                         // reset ship position
-          ship.alpha = 1;                       // make ship visible again
-          boom.destroy();                       // remove explosion sprite
-        });
-          // score add and repaint
-        this.p1Score += ship.points;
-        this.scoreLeft.text = this.p1Score;
-
-        // Saving high score
-        this.random = Phaser.Math.Between(1, 4);
-        if (this.p1Score > this.game.config.highScore)
-        {
-          game.config.highScore = this.p1Score;
-        }
-        if(this.random == 1)
-        {
-          this.sound.play('sfx_explosion1');
-        }
-        else if (this.random == 2)
-        {
-          this.sound.play('sfx_explosion2');
-        }
-        else if (this.random == 3)
-        {
-          this.sound.play('sfx_explosion3');
-        }        
-        else if (this.random == 4)
-        {
-          this.sound.play('sfx_explosion4');
-        }
 
         
-      }
       
-      createExplosion(x,y) 
-      {
-       this.emitterfunc = this.add.particles(x, y, 'sparks', {
-        speed: 100,
-        lifespan: 300,
-        gravityY: 200
-    });
-      return this.emitterfunc;
-  }
+      
       
     
 }

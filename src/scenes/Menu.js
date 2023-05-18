@@ -8,14 +8,12 @@ class Menu extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
         // load audio
         this.load.audio('sfx_select', './assets/blip_select12.wav');
         this.load.audio('sfx_explosion', './assets/explosion38.wav');
-        this.load.audio('sfx_explosion1', './assets/explosion1.wav');
-        this.load.audio('sfx_explosion2', './assets/explosion2.wav');
-        this.load.audio('sfx_explosion3', './assets/explosion3.wav');
         this.load.audio('sfx_explosion4', './assets/exploson4.ogg');
 
         this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
         this.load.audio('bgm', './assets/scifi.mp3');
         this.load.image('menuscreen', './assets/rocketpatrolmenu.png');
+        // replace all this but it's not high priority
     }
       
     create(){

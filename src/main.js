@@ -19,13 +19,19 @@ Rocket Patrol 100000 Remodeled Super Epic Hakxor Version
 
 let config = {
     type: Phaser.AUTO,
-    width: 600,
-    height:600,
+    width: 1230, //1230x1231
+    height:1231,
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     scene: [Menu,Play],
-    highScore: 0
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity:{y:300},
+            debug: true
+        }
+    },
 
 }
 // create function in config
@@ -35,8 +41,6 @@ let game = new Phaser.Game(config);
 let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 game.config.highScore = 0;
-// reserve keyboard variables
-let keyF, keyR, keyLEFT, keyRIGHT;
 
 //Track a high score that persists across scenes and display it in the UI (5)
 //global variable
