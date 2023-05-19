@@ -2,21 +2,23 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
     constructor() // The constructor (a special method for creating and initializing an object) uses
     {             // the "super" keyword to call the constructor of the super class
         super("playScene");
-        this.VEL = 100;
+        this.VEL = 150;
     }
 
     preload() {
         this.load.image('character', './assets/rocket.png');
         // load images/tile sprites
         this.load.image('map', './assets/Test Map.png');
+        this.load.image('tower', './assets/tower_placehold.png');
       }
       
     create(){
         // place map sprite
         this.starfield = this.add.tileSprite(0, 0, 1280, 1281, 'map').setOrigin(0, 0);
         // add character (placeholder sprite)
-        this.character = this.physics.add.sprite(this.sys.game.config.width / 2, this.sys.game.config.height/2, 'character',0);
+        this.character = this.physics.add.sprite(this.sys.game.config.width / 2 + 50, this.sys.game.config.height/2, 'character',0);
         //animate character
+        
         /*this.anims.create({
           key: 'cat',
           frames: this.anims.generateFrameNumbers('character', { start: 0, end: 1, first: 0}),
@@ -24,18 +26,19 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
           repeat: -1
         });
         this.character.anims.play('cat');*/
-        //this.character.body.setCollideWorldBounds(true);
+		    this.tower = this.physics.add.staticSprite(this.sys.game.config.width / 2, this.sys.game.config.height/2, 'tower',0);
+        this.towerHP = 500; // set an HP amount for crystal tower
+
+        this.physics.add.collider(this.character,this.tower);
+        this.character.body.setCollideWorldBounds(true);
 
 
         // define keys
         this.cursors = this.input.keyboard.createCursorKeys()
-        // initialize score
 
         // GAME OVER flag
         this.gameOver = false;
-        
-        // Maybe add clock after
-        
+                
 
 
      }
@@ -65,6 +68,4 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
 
       }
       
-      
-    
 }
