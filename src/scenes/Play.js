@@ -18,8 +18,10 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
         this.starfield = this.add.tileSprite(0, 0, 1280, 1281, 'map').setOrigin(0, 0);
         // add character (placeholder sprite)
         this.character = this.physics.add.sprite(this.sys.game.config.width / 2 + 50, this.sys.game.config.height/2, 'character',0);
-        this.enemy = this.physics.add.sprite(this.sys.game.config.width, this.sys.game.config.height/2, 'enemy');
-        //animate character
+        // Add ten enemies, staggered by 40 pixels. Potentially move this into update so we can constantly change the amount of enemies.
+        this.enemyGroup = this.physics.add.group({ key: 'enemy', frame: 0, repeat: 10, setXY: { x: this.sys.game.config.width, y: this.sys.game.config.height/2, stepX: 40 } });        
+
+        //animate character (replace this once I do the sprites)
 
         /*this.anims.create({
           key: 'cat',
@@ -28,13 +30,19 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
           repeat: -1
         });
         this.character.anims.play('cat');*/
+
 		    this.tower = this.physics.add.staticSprite(this.sys.game.config.width / 2, this.sys.game.config.height/2, 'tower',0);
         this.towerHP = 500; // set an HP amount for crystal tower; when the enemies attack it, this will go down
-        // Maybe add an HP bar? Currently not sure how to code that
 
+        // Add an HP bar at some point? Currently not sure how to code that
+
+        // Add colliders
         this.physics.add.collider(this.character,this.tower);
-        this.physics.add.collider(this.enemy,this.tower); // enemy and character collide with towers (but not each other currently)
+        this.physics.add.collider(this.enemyGroup,this.tower); // enemy and character collide with towers (but not each other currently)
         this.character.body.setCollideWorldBounds(true);
+
+        // add clock
+        this.clock = this.time.delayedCall(600000000, this.onClockEvent, null, this); 
 
 
         // define keys
@@ -48,8 +56,9 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
      }
      update() {
         
-    
-        this.direction = new Phaser.Math.Vector2(0)
+        this.elapsed = parseInt(this.clock.getElapsedSeconds());
+        this.direction = new Phaser.Math.Vector2(0);
+
         if(this.cursors.left.isDown)
         {
             this.direction.x = -1;
@@ -69,7 +78,19 @@ class Play extends Phaser.Scene{ //creating js class 'menu' that extends phaser'
         }
         this.direction.normalize();
         this.character.setVelocity(this.VEL*this.direction.x,this.VEL*this.direction.y);
-        this.enemy.x -= 1;
+
+        if(this.elapsed % 3 == 0)
+        {
+          this.getEnemy = Phaser.Utils.Array.RemoveRandomElement(this.enemyGroup.getChildren());
+        
+          if(this.getEnemy)
+          {
+            this.physics.add.collider(this.getEnemy,this.tower);
+            this.getEnemy.setVelocity(this.VEL*-0.5,0); // Move enemy across the screen. I'm not sure how to program the pathing yet
+            //this.getEnemy.x -= -1;
+          }
+        }
+        
 
       }
       
